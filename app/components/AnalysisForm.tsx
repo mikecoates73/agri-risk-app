@@ -126,7 +126,7 @@ export default function AnalysisForm() {
         </button>
       </form>
 
-      {result && <AnalysisResult result={result} />}
+      {result && <AnalysisResult result={result} country={formData.country} crop={formData.crop} />}
     </div>
   );
 } 
