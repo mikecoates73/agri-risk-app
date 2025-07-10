@@ -3,10 +3,10 @@ import { SWOTAnalysis } from '../types';
 export function parseSWOTAnalysis(analysis: string, country: string, crop: string): SWOTAnalysis {
   const lines = analysis.split('\n').map(line => line.trim()).filter(line => line.length > 0);
   
-  let strengths: string[] = [];
-  let weaknesses: string[] = [];
-  let opportunities: string[] = [];
-  let threats: string[] = [];
+  const strengths: string[] = [];
+  const weaknesses: string[] = [];
+  const opportunities: string[] = [];
+  const threats: string[] = [];
   
   let currentSection: 'strengths' | 'weaknesses' | 'opportunities' | 'threats' | null = null;
   

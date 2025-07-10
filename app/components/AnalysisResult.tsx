@@ -47,7 +47,7 @@ export default function AnalysisResult({ result, country, crop }: AnalysisResult
         setSaveStatus('error');
         setSaveMessage(saveResult.error || 'Failed to save analysis');
       }
-    } catch (error) {
+    } catch {
       setSaveStatus('error');
       setSaveMessage('An error occurred while saving');
     } finally {
