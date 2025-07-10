@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase'
+import { getSupabase } from '@/lib/supabase'
 
 export default function AuthForm() {
   const [email, setEmail] = useState('')
@@ -10,7 +10,7 @@ export default function AuthForm() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
 
-  const supabase = createClient()
+  const supabase = getSupabase()
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault()
