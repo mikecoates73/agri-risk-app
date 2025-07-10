@@ -2,12 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { AnalysisRequest, AnalysisResponse } from '../../../types';
 
+// Debug: Check if API key is available
+console.log('ANTHROPIC_API_KEY exists:', !!process.env.ANTHROPIC_API_KEY);
+console.log('ANTHROPIC_API_KEY length:', process.env.ANTHROPIC_API_KEY?.length || 0);
+
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if API key is configured
+    if (!process.env.ANTHROPIC_API_KEY) {
+      console.error('ANTHROPIC_API_KEY is not set');
+      return NextResponse.json(
+        { success: false, error: 'API key not configured. Please check your .env.local file.' },
+        { status: 500 }
+      );
+    }
+
     const body: AnalysisRequest = await request.json();
     
     // Validate request

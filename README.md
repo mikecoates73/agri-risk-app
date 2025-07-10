@@ -4,18 +4,22 @@ A simple web application that generates SWOT (Strengths, Weaknesses, Opportuniti
 
 ## Features
 
-- Simple form with country and crop inputs
-- Integration with Anthropic's Claude API
-- Markdown-formatted SWOT analysis display
-- Responsive design for web and mobile
-- Real-time form validation
-- Loading states and error handling
+- **Authentication**: Secure user authentication with Supabase
+- **Protected Routes**: Access control for authenticated users only
+- **Simple Form**: Country and crop inputs for SWOT analysis
+- **AI Integration**: Integration with Anthropic's Claude API
+- **Markdown Display**: Formatted SWOT analysis results
+- **Responsive Design**: Works on web and mobile devices
+- **Real-time Validation**: Form validation with immediate feedback
+- **Loading States**: Smooth user experience with loading indicators
+- **Error Handling**: Comprehensive error management
 
 ## Tech Stack
 
 - **Frontend**: Next.js 14 with App Router
 - **Styling**: Tailwind CSS
 - **Language**: TypeScript
+- **Authentication**: Supabase Auth
 - **AI Integration**: Anthropic Claude API
 - **Deployment**: Vercel (recommended)
 
@@ -44,6 +48,8 @@ npm install
 Create a `.env.local` file in the project root:
 ```env
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 4. Run the development server:
@@ -134,6 +140,8 @@ npm start
 Make sure to set the following environment variables:
 
 - `ANTHROPIC_API_KEY`: Your Anthropic API key for Claude AI access
+- `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key
 
 ## Contributing
 
