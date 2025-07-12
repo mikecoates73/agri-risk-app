@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AnalysisRequest, AnalysisResponse } from '../../types';
+import { AnalysisRequest, AnalysisResponse, WorldBankStats } from '../../types';
 import AnalysisResult from './AnalysisResult';
 
 export default function AnalysisForm() {
@@ -67,6 +67,30 @@ export default function AnalysisForm() {
     }
   };
 
+  const renderWorldBankStats = (stats: WorldBankStats) => (
+    <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      <h3 className="text-sm font-medium text-blue-900 mb-3">Agricultural Statistics</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <div>
+          <span className="text-blue-700 font-medium">Agricultural Land:</span>
+          <span className="ml-2 text-blue-600">{stats.agriculturalLand}</span>
+        </div>
+        <div>
+          <span className="text-blue-700 font-medium">Cereal Yield:</span>
+          <span className="ml-2 text-blue-600">{stats.cerealYield}</span>
+        </div>
+        <div>
+          <span className="text-blue-700 font-medium">Rural Population:</span>
+          <span className="ml-2 text-blue-600">{stats.ruralPopulation}</span>
+        </div>
+        <div>
+          <span className="text-blue-700 font-medium">Agriculture GDP:</span>
+          <span className="ml-2 text-blue-600">{stats.agriculturalValueAdded}</span>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -85,6 +109,7 @@ export default function AnalysisForm() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
               disabled={loading}
             />
+            {result?.worldBankStats && renderWorldBankStats(result.worldBankStats)}
           </div>
 
           <div>

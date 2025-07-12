@@ -3,10 +3,18 @@ export interface AnalysisRequest {
   crop: string;
 }
 
+export interface WorldBankStats {
+  agriculturalLand: string;
+  cerealYield: string;
+  ruralPopulation: string;
+  agriculturalValueAdded: string;
+}
+
 export interface AnalysisResponse {
   analysis: string;
   success: boolean;
   error?: string;
+  worldBankStats?: WorldBankStats;
 }
 
 export interface SWOTAnalysis {
