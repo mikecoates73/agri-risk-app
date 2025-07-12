@@ -2,6 +2,37 @@ import { NextRequest, NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 import { AnalysisRequest, AnalysisResponse, WorldBankStats } from '../../../types';
 
+// Type definitions for World Bank API responses
+interface WorldBankCountry {
+  id: string;
+  name: string;
+  iso2Code: string;
+  region: { id: string; value: string };
+  adminregion: { id: string; value: string };
+  incomeLevel: { id: string; value: string };
+  lendingType: { id: string; value: string };
+  capitalCity: string;
+  longitude: string;
+  latitude: string;
+}
+
+interface WorldBankIndicatorData {
+  indicator: { id: string; value: string };
+  country: { id: string; value: string };
+  countryiso3code: string;
+  date: string;
+  value: number | null;
+  unit: string;
+  obs_status: string;
+  decimal: number;
+}
+
+interface WorldBankError {
+  status: number;
+  message: string;
+  type?: string;
+}
+
 // Debug: Check if API key is available
 console.log('ANTHROPIC_API_KEY exists:', !!process.env.ANTHROPIC_API_KEY);
 console.log('ANTHROPIC_API_KEY length:', process.env.ANTHROPIC_API_KEY?.length || 0);
@@ -17,8 +48,8 @@ async function getCountryCode(countryName: string): Promise<string | null> {
     const data = await response.json();
     
     if (data && data[1]) {
-      const countries = data[1];
-      const country = countries.find((c: any) => 
+      const countries: WorldBankCountry[] = data[1];
+      const country = countries.find((c: WorldBankCountry) => 
         c.name.toLowerCase().includes(countryName.toLowerCase()) ||
         countryName.toLowerCase().includes(c.name.toLowerCase())
       );
@@ -96,11 +127,12 @@ async function retryWithBackoff<T>(
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       return await fn();
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Check if it's a 529 overload error or other retryable error
-      const isRetryable = error.status === 529 || 
-                         error.status === 429 || 
-                         error.status >= 500;
+      const apiError = error as WorldBankError;
+      const isRetryable = apiError.status === 529 || 
+                         apiError.status === 429 || 
+                         (apiError.status && apiError.status >= 500);
       
       if (attempt === maxRetries || !isRetryable) {
         throw error;
@@ -174,20 +206,21 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('API Error:', error);
     
     let errorMessage = 'An unexpected error occurred';
     
     // Provide more specific error messages
-    if (error.status === 529) {
+    const apiError = error as WorldBankError;
+    if (apiError.status === 529) {
       errorMessage = 'Anthropic API is currently overloaded. Please try again in a few moments.';
-    } else if (error.status === 429) {
+    } else if (apiError.status === 429) {
       errorMessage = 'Rate limit exceeded. Please wait a moment before trying again.';
-    } else if (error.status === 401) {
+    } else if (apiError.status === 401) {
       errorMessage = 'Invalid API key. Please check your configuration.';
-    } else if (error.message) {
-      errorMessage = error.message;
+    } else if (apiError.message) {
+      errorMessage = apiError.message;
     }
     
     const response: AnalysisResponse = {
