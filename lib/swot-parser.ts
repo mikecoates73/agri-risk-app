@@ -1,6 +1,6 @@
 import { SWOTAnalysis } from '../types';
 
-export function parseSWOTAnalysis(analysis: string, country: string, crop: string): SWOTAnalysis {
+export function parseSWOTAnalysis(analysis: string, country: string, item: string): SWOTAnalysis {
   const lines = analysis.split('\n').map(line => line.trim()).filter(line => line.length > 0);
   
   const strengths: string[] = [];
@@ -77,7 +77,7 @@ export function parseSWOTAnalysis(analysis: string, country: string, crop: strin
   
   return {
     country,
-    crop,
+    item,
     strengths,
     weaknesses,
     opportunities,

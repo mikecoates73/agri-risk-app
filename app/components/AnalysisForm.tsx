@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { AnalysisRequest, AnalysisResponse, WorldBankStats, WeatherData, TradingEconomicsStats, NASAImagery } from '../../types';
+import { AnalysisRequest, AnalysisResponse, WorldBankStats, WeatherData, TradingEconomicsStats, NASAImagery, FAOSTATItem } from '../../types';
 import AnalysisResult from './AnalysisResult';
 
 // UN-recognized countries list (alphabetically sorted)
@@ -32,11 +32,36 @@ const COUNTRIES = [
 export default function AnalysisForm() {
   const [formData, setFormData] = useState<AnalysisRequest>({
     country: 'Egypt', // Set Egypt as default
-    crop: '',
+    item: '',
   });
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AnalysisResponse | null>(null);
   const [error, setError] = useState<string>('');
+  const [faostatItems, setFaostatItems] = useState<FAOSTATItem[]>([]);
+  const [itemsLoading, setItemsLoading] = useState(true);
+  const [useCustomItem, setUseCustomItem] = useState(false);
+
+  // Fetch FAOSTAT items on component mount
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await fetch('/api/faostat');
+        const data = await response.json();
+        
+        if (response.ok) {
+          setFaostatItems(data.items);
+        } else {
+          console.error('Failed to fetch FAOSTAT items:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching FAOSTAT items:', error);
+      } finally {
+        setItemsLoading(false);
+      }
+    };
+
+    fetchItems();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -48,13 +73,25 @@ export default function AnalysisForm() {
     if (error) setError('');
   };
 
+  const handleItemSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedItem = e.target.value;
+    if (selectedItem === 'custom') {
+      setUseCustomItem(true);
+      setFormData(prev => ({ ...prev, item: '' }));
+    } else {
+      setUseCustomItem(false);
+      setFormData(prev => ({ ...prev, item: selectedItem }));
+    }
+    if (error) setError('');
+  };
+
   const validateForm = (): boolean => {
     if (!formData.country.trim()) {
       setError('Please enter a country name');
       return false;
     }
-    if (!formData.crop.trim()) {
-      setError('Please enter a crop name');
+    if (!formData.item.trim()) {
+      setError('Please enter an item name');
       return false;
     }
     return true;
@@ -289,19 +326,43 @@ export default function AnalysisForm() {
           </div>
 
           <div>
-            <label htmlFor="crop" className="block text-sm font-medium text-gray-700 mb-2">
-              Crop
+            <label htmlFor="item" className="block text-sm font-medium text-gray-700 mb-2">
+              Item
             </label>
-            <input
-              type="text"
-              id="crop"
-              name="crop"
-              value={formData.crop}
-              onChange={handleInputChange}
-              placeholder="Enter crop name (e.g., Corn, Rice, Wheat)"
+            <select
+              id="item"
+              name="item"
+              value={useCustomItem ? 'custom' : formData.item}
+              onChange={handleItemSelection}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-              disabled={loading}
-            />
+              disabled={loading || itemsLoading}
+            >
+              {itemsLoading ? (
+                <option value="">Loading items...</option>
+              ) : (
+                <>
+                  <option value="">Select an item</option>
+                                     {faostatItems.map(item => (
+                     <option key={item.id} value={item["Item"]}>
+                       {item["Item"]}
+                     </option>
+                   ))}
+                  <option value="custom">Custom Item</option>
+                </>
+              )}
+            </select>
+                         {useCustomItem && (
+               <input
+                 type="text"
+                 id="item"
+                 name="item"
+                 value={formData.item}
+                 onChange={handleInputChange}
+                 placeholder="Enter custom item name"
+                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors mt-2"
+                 disabled={loading}
+               />
+             )}
           </div>
         </div>
 
@@ -327,7 +388,7 @@ export default function AnalysisForm() {
         </button>
       </form>
 
-      {result && <AnalysisResult result={result} country={formData.country} crop={formData.crop} />}
+      {result && <AnalysisResult result={result} country={formData.country} item={formData.item} />}
     </div>
   );
 } 

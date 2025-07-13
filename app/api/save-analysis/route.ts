@@ -14,22 +14,22 @@ export async function POST(request: NextRequest) {
     const body: SaveAnalysisRequest = await request.json();
     
     // Validate request
-    if (!body.country || !body.crop || !body.analysis) {
+    if (!body.country || !body.item || !body.analysis) {
       return NextResponse.json(
-        { success: false, error: 'Country, crop, and analysis are required' },
+        { success: false, error: 'Country, item, and analysis are required' },
         { status: 400 }
       );
     }
 
     // Parse the SWOT analysis from markdown
-    const swotData = parseSWOTAnalysis(body.analysis, body.country, body.crop);
+    const swotData = parseSWOTAnalysis(body.analysis, body.country, body.item);
     
     // Insert into Supabase
     const { data, error } = await supabase
       .from('swot_analyses')
       .insert({
         country: swotData.country,
-        crop: swotData.crop,
+        item: swotData.item,
         strengths: swotData.strengths,
         weaknesses: swotData.weaknesses,
         opportunities: swotData.opportunities,

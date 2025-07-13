@@ -442,9 +442,9 @@ export async function POST(request: NextRequest) {
     const body: AnalysisRequest = await request.json();
     
     // Validate request
-    if (!body.country || !body.crop) {
+    if (!body.country || !body.item) {
       return NextResponse.json(
-        { success: false, error: 'Country and crop are required' },
+        { success: false, error: 'Country and item are required' },
         { status: 400 }
       );
     }
@@ -475,7 +475,7 @@ export async function POST(request: NextRequest) {
     // Get Trading Economics data
     let tradingEconomicsStats: TradingEconomicsStats | null = null;
     try {
-      tradingEconomicsStats = await getTradingEconomicsData(body.country, body.crop);
+      tradingEconomicsStats = await getTradingEconomicsData(body.country, body.item);
     } catch (error) {
       console.error('Error fetching Trading Economics data:', error);
       // Continue with analysis even if Trading Economics data fails
@@ -491,7 +491,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Format prompt as specified in PRD
-    const prompt = `Please provide a brief SWOT analysis of ${body.crop} in ${body.country} and return in markdown, each with a header for SWOT and 3-5 bullet points for each SWOT category`;
+    const prompt = `Please provide a brief SWOT analysis of ${body.item} in ${body.country} and return in markdown, each with a header for SWOT and 3-5 bullet points for each SWOT category`;
 
     // Use retry logic for the Anthropic API call
     const message = await retryWithBackoff(async () => {

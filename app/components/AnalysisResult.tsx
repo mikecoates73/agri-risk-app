@@ -6,10 +6,10 @@ import { AnalysisResponse, SaveAnalysisRequest } from '../../types';
 interface AnalysisResultProps {
   result: AnalysisResponse;
   country: string;
-  crop: string;
+  item: string;
 }
 
-export default function AnalysisResult({ result, country, crop }: AnalysisResultProps) {
+export default function AnalysisResult({ result, country, item }: AnalysisResultProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [saveMessage, setSaveMessage] = useState('');
@@ -26,7 +26,7 @@ export default function AnalysisResult({ result, country, crop }: AnalysisResult
     try {
       const saveRequest: SaveAnalysisRequest = {
         country,
-        crop,
+        item,
         analysis: result.analysis,
       };
 

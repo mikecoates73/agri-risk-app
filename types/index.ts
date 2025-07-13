@@ -1,6 +1,12 @@
 export interface AnalysisRequest {
   country: string;
-  crop: string;
+  item: string;
+}
+
+export interface FAOSTATItem {
+  id: number;
+  "Item Code (FAO)": number;
+  "Item": string;
 }
 
 export interface WorldBankStats {
@@ -51,7 +57,7 @@ export interface AnalysisResponse {
 export interface SWOTAnalysis {
   id?: string;
   country: string;
-  crop: string;
+  item: string;
   strengths: string[];
   weaknesses: string[];
   opportunities: string[];
@@ -62,7 +68,7 @@ export interface SWOTAnalysis {
 
 export interface SaveAnalysisRequest {
   country: string;
-  crop: string;
+  item: string;
   analysis: string;
 }
 
