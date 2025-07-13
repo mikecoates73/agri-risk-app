@@ -1,6 +1,6 @@
-# Agricultural SWOT Analysis App
+# Agricultural Risk Analysis App
 
-A simple web application that generates SWOT (Strengths, Weaknesses, Opportunities, Threats) analysis for agricultural crops in specific countries using Claude AI.
+A comprehensive web application that generates risk analysis for agricultural crops in specific countries using AI-powered insights, weather data, and market statistics.
 
 ## Features
 
@@ -8,6 +8,8 @@ A simple web application that generates SWOT (Strengths, Weaknesses, Opportuniti
 - **Protected Routes**: Access control for authenticated users only
 - **Simple Form**: Country and crop inputs for SWOT analysis
 - **AI Integration**: Integration with Anthropic's Claude API
+- **Weather Data**: Current weather information for selected countries
+- **Agricultural Statistics**: World Bank data integration
 - **Markdown Display**: Formatted SWOT analysis results
 - **Responsive Design**: Works on web and mobile devices
 - **Real-time Validation**: Form validation with immediate feedback
@@ -30,6 +32,7 @@ A simple web application that generates SWOT (Strengths, Weaknesses, Opportuniti
 - Node.js 18+ 
 - npm or yarn
 - Anthropic API key
+- OpenWeather API key (optional, for weather data)
 
 ### Installation
 
@@ -48,6 +51,7 @@ npm install
 Create a `.env.local` file in the project root:
 ```env
 ANTHROPIC_API_KEY=your_anthropic_api_key_here
+OPENWEATHER_API_KEY=your_openweather_api_key_here
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
@@ -140,6 +144,7 @@ npm start
 Make sure to set the following environment variables:
 
 - `ANTHROPIC_API_KEY`: Your Anthropic API key for Claude AI access
+- `OPENWEATHER_API_KEY`: Your OpenWeather API key for weather data (optional)
 - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Your Supabase anonymous key
 

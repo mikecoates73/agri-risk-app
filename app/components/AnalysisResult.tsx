@@ -57,9 +57,15 @@ export default function AnalysisResult({ result, country, crop }: AnalysisResult
 
   // Simple markdown parsing for headers and lists
   const formatMarkdown = (text: string) => {
-    return text
-      .split('\n')
+    const lines = text.split('\n');
+    
+    return lines
       .map((line, index) => {
+        // Skip the first line if it contains "SWOT Analysis:" (the title line)
+        if (index === 0 && line.includes('SWOT Analysis:')) {
+          return null;
+        }
+        
         // Handle headers (## or ###)
         if (line.startsWith('## ')) {
           return (
@@ -101,7 +107,8 @@ export default function AnalysisResult({ result, country, crop }: AnalysisResult
         }
         // Handle empty lines
         return <div key={index} className="h-2"></div>;
-      });
+      })
+      .filter(Boolean); // Remove null elements
   };
 
   const getSaveButtonClass = () => {

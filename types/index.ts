@@ -10,11 +10,42 @@ export interface WorldBankStats {
   agriculturalValueAdded: string;
 }
 
+
+
+export interface TradingEconomicsStats {
+  commodityPrice: string;
+  inflationRate: string;
+  gdpGrowth: string;
+  exchangeRate: string;
+  interestRate: string;
+}
+
+export interface NASAImagery {
+  imageUrl: string;
+  acquisitionDate: string;
+  coverage: string;
+  resolution: string;
+  description: string;
+  layer: string;
+}
+
+export interface WeatherData {
+  temperature: string;
+  description: string;
+  humidity: string;
+  windSpeed: string;
+  location: string;
+}
+
 export interface AnalysisResponse {
   analysis: string;
   success: boolean;
   error?: string;
   worldBankStats?: WorldBankStats;
+
+  tradingEconomicsStats?: TradingEconomicsStats;
+  nasaImagery?: NASAImagery;
+  weatherData?: WeatherData;
 }
 
 export interface SWOTAnalysis {
@@ -39,4 +70,6 @@ export interface SaveAnalysisResponse {
   success: boolean;
   id?: string;
   error?: string;
-} 
+}
+
+ 

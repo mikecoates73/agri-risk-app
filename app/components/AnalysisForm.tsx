@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AnalysisRequest, AnalysisResponse, WorldBankStats } from '../../types';
+import { AnalysisRequest, AnalysisResponse, WorldBankStats, WeatherData, TradingEconomicsStats, NASAImagery } from '../../types';
 import AnalysisResult from './AnalysisResult';
 
 export default function AnalysisForm() {
@@ -69,7 +69,16 @@ export default function AnalysisForm() {
 
   const renderWorldBankStats = (stats: WorldBankStats) => (
     <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-      <h3 className="text-sm font-medium text-blue-900 mb-3">Agricultural Statistics</h3>
+      <div className="flex items-center mb-3">
+        <div className="mr-3">
+          <img 
+            src="/images/icons/world-bank-logo.png" 
+            alt="World Bank Logo" 
+            className="w-8 h-8 object-contain"
+          />
+        </div>
+        <h3 className="text-sm font-medium text-blue-900">Agricultural Statistics</h3>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
         <div>
           <span className="text-blue-700 font-medium">Agricultural Land:</span>
@@ -86,6 +95,137 @@ export default function AnalysisForm() {
         <div>
           <span className="text-blue-700 font-medium">Agriculture GDP:</span>
           <span className="ml-2 text-blue-600">{stats.agriculturalValueAdded}</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderWeatherData = (weather: WeatherData) => (
+    <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+      <div className="flex items-center mb-3">
+        <div className="mr-3">
+          <img 
+            src="/images/icons/open-weather-logo.png" 
+            alt="OpenWeather Logo" 
+            className="w-8 h-8 object-contain"
+          />
+        </div>
+        <h3 className="text-sm font-medium text-green-900">Current Weather in {weather.location}</h3>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <div>
+          <span className="text-green-700 font-medium">Temperature:</span>
+          <span className="ml-2 text-green-600">{weather.temperature}</span>
+        </div>
+        <div>
+          <span className="text-green-700 font-medium">Conditions:</span>
+          <span className="ml-2 text-green-600 capitalize">{weather.description}</span>
+        </div>
+        <div>
+          <span className="text-green-700 font-medium">Humidity:</span>
+          <span className="ml-2 text-green-600">{weather.humidity}</span>
+        </div>
+        <div>
+          <span className="text-green-700 font-medium">Wind Speed:</span>
+          <span className="ml-2 text-green-600">{weather.windSpeed}</span>
+        </div>
+      </div>
+    </div>
+  );
+
+
+
+  const renderTradingEconomicsStats = (tradingStats: TradingEconomicsStats) => (
+    <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+      <div className="flex items-center mb-3">
+        <div className="mr-3 w-8 h-8 bg-purple-600 rounded flex items-center justify-center">
+          <span className="text-white text-xs font-bold">TE</span>
+        </div>
+        <h3 className="text-sm font-medium text-purple-900">Trading Economics Data</h3>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <div>
+          <span className="text-purple-700 font-medium">Commodity Price:</span>
+          <span className="ml-2 text-purple-600">{tradingStats.commodityPrice}</span>
+        </div>
+        <div>
+          <span className="text-purple-700 font-medium">Inflation Rate:</span>
+          <span className="ml-2 text-purple-600">{tradingStats.inflationRate}</span>
+        </div>
+        <div>
+          <span className="text-purple-700 font-medium">GDP Growth:</span>
+          <span className="ml-2 text-purple-600">{tradingStats.gdpGrowth}</span>
+        </div>
+        <div>
+          <span className="text-purple-700 font-medium">Exchange Rate:</span>
+          <span className="ml-2 text-purple-600">{tradingStats.exchangeRate}</span>
+        </div>
+        <div>
+          <span className="text-purple-700 font-medium">Interest Rate:</span>
+          <span className="ml-2 text-purple-600">{tradingStats.interestRate}</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderNASAImagery = (nasaData: NASAImagery) => (
+    <div className="mt-4 p-4 bg-teal-50 border border-teal-200 rounded-lg">
+      <div className="flex items-center mb-3">
+        <div className="mr-3 w-8 h-8 bg-teal-600 rounded flex items-center justify-center">
+          <span className="text-white text-xs font-bold">NASA</span>
+        </div>
+        <h3 className="text-sm font-medium text-teal-900">NASA Satellite Imagery</h3>
+      </div>
+      
+      <div className="space-y-3">
+        <div className="relative">
+          <div className="w-full h-48 bg-teal-100 border border-teal-200 rounded-lg flex items-center justify-center overflow-hidden">
+            {nasaData.imageUrl ? (
+              <img 
+                src={nasaData.imageUrl} 
+                alt="NASA Satellite Image" 
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Hide image and show placeholder text if it fails to load
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                }}
+                onLoad={(e) => {
+                  // Hide loading placeholder when image loads successfully
+                  e.currentTarget.nextElementSibling?.classList.add('hidden');
+                }}
+              />
+            ) : null}
+            <div className={`text-center ${nasaData.imageUrl ? '' : ''}`}>
+              <div className="text-teal-600 text-lg font-medium mb-2">🛰️</div>
+              <div className="text-teal-700 text-sm">NASA Satellite Image</div>
+              <div className="text-teal-600 text-xs mt-1">
+                {nasaData.imageUrl ? 'Loading...' : 'No image available'}
+              </div>
+            </div>
+          </div>
+          <div className="absolute top-2 right-2 bg-teal-600 text-white text-xs px-2 py-1 rounded">
+            {nasaData.resolution}
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          <div>
+            <span className="text-teal-700 font-medium">Layer:</span>
+            <span className="ml-2 text-teal-600">{nasaData.layer}</span>
+          </div>
+          <div>
+            <span className="text-teal-700 font-medium">Acquisition Date:</span>
+            <span className="ml-2 text-teal-600">{nasaData.acquisitionDate}</span>
+          </div>
+          <div>
+            <span className="text-teal-700 font-medium">Coverage:</span>
+            <span className="ml-2 text-teal-600">{nasaData.coverage}</span>
+          </div>
+        </div>
+        
+        <div className="text-sm text-teal-600 bg-teal-100 p-2 rounded">
+          {nasaData.description}
         </div>
       </div>
     </div>
@@ -110,6 +250,10 @@ export default function AnalysisForm() {
               disabled={loading}
             />
             {result?.worldBankStats && renderWorldBankStats(result.worldBankStats)}
+
+            {result?.tradingEconomicsStats && renderTradingEconomicsStats(result.tradingEconomicsStats)}
+            {result?.nasaImagery && renderNASAImagery(result.nasaImagery)}
+            {result?.weatherData && renderWeatherData(result.weatherData)}
           </div>
 
           <div>
