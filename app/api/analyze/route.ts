@@ -16,6 +16,18 @@ interface WorldBankCountry {
   latitude: string;
 }
 
+// Type definitions for Trading Economics API responses
+interface TradingEconomicsIndicator {
+  Category: string;
+  LatestValue: number;
+  PreviousValue: number;
+}
+
+interface TradingEconomicsCountry {
+  Country: string;
+  Code: string;
+}
+
 
 
 interface WorldBankError {
@@ -246,7 +258,7 @@ async function getTradingEconomicsData(countryName: string, cropName: string): P
 
     // Parse economic indicators
     if (indicatorsData && Array.isArray(indicatorsData)) {
-      indicatorsData.forEach((indicator: any) => {
+      indicatorsData.forEach((indicator: TradingEconomicsIndicator) => {
         switch (indicator.Category) {
           case 'Inflation Rate':
             stats.inflationRate = `${indicator.LatestValue}% (${indicator.PreviousValue}%)`;
@@ -317,7 +329,7 @@ async function getTradingEconomicsCountryCode(countryName: string): Promise<stri
     if (mappedCode) return mappedCode;
 
     // Then search in the API response
-    const country = countries.find((c: any) => 
+    const country = countries.find((c: TradingEconomicsCountry) => 
       c.Country.toLowerCase().includes(countryName.toLowerCase()) ||
       countryName.toLowerCase().includes(c.Country.toLowerCase())
     );

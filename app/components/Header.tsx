@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
@@ -29,10 +30,12 @@ export default function Header() {
           {/* Logo and App Name */}
           <div className="flex items-center space-x-3">
             <div className="w-32 h-32 flex items-center justify-center">
-              <img 
+              <Image 
                 src="/images/logos/gbrw (small).png" 
                 alt="Agricultural Risk Analysis Logo" 
-                className="w-full h-full object-contain"
+                width={128}
+                height={128}
+                className="object-contain"
               />
             </div>
             <h1 className="text-xl font-bold text-gray-900">

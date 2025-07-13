@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { AnalysisRequest, AnalysisResponse, WorldBankStats, WeatherData, TradingEconomicsStats, NASAImagery } from '../../types';
 import AnalysisResult from './AnalysisResult';
 
@@ -71,10 +72,12 @@ export default function AnalysisForm() {
     <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
       <div className="flex items-center mb-3">
         <div className="mr-3">
-          <img 
+          <Image 
             src="/images/icons/world-bank-logo.png" 
             alt="World Bank Logo" 
-            className="w-8 h-8 object-contain"
+            width={32}
+            height={32}
+            className="object-contain"
           />
         </div>
         <h3 className="text-sm font-medium text-blue-900">Agricultural Statistics</h3>
@@ -104,10 +107,12 @@ export default function AnalysisForm() {
     <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
       <div className="flex items-center mb-3">
         <div className="mr-3">
-          <img 
+          <Image 
             src="/images/icons/open-weather-logo.png" 
             alt="OpenWeather Logo" 
-            className="w-8 h-8 object-contain"
+            width={32}
+            height={32}
+            className="object-contain"
           />
         </div>
         <h3 className="text-sm font-medium text-green-900">Current Weather in {weather.location}</h3>
@@ -181,18 +186,13 @@ export default function AnalysisForm() {
         <div className="relative">
           <div className="w-full h-48 bg-teal-100 border border-teal-200 rounded-lg flex items-center justify-center overflow-hidden">
             {nasaData.imageUrl ? (
-              <img 
+              <Image 
                 src={nasaData.imageUrl} 
                 alt="NASA Satellite Image" 
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  // Hide image and show placeholder text if it fails to load
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                }}
-                onLoad={(e) => {
-                  // Hide loading placeholder when image loads successfully
-                  e.currentTarget.nextElementSibling?.classList.add('hidden');
+                fill
+                className="object-cover"
+                onError={() => {
+                  // Handle error if needed
                 }}
               />
             ) : null}
