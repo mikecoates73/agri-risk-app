@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import FAOSTATChart from './FAOSTATChart';
 import { FAOSTATChartData } from '@/types';
 
@@ -16,13 +16,7 @@ export default function FAOSTATChartCollapsible({ country, item, isVisible }: FA
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
-    if (isVisible && country && item && isExpanded) {
-      fetchChartData();
-    }
-  }, [country, item, isVisible, isExpanded]);
-
-  const fetchChartData = async () => {
+  const fetchChartData = useCallback(async () => {
     if (!country || !item) return;
 
     setLoading(true);
@@ -52,7 +46,13 @@ export default function FAOSTATChartCollapsible({ country, item, isVisible }: FA
     } finally {
       setLoading(false);
     }
-  };
+  }, [country, item]);
+
+  useEffect(() => {
+    if (isVisible && country && item && isExpanded) {
+      fetchChartData();
+    }
+  }, [country, item, isVisible, isExpanded, fetchChartData]);
 
   if (!isVisible) return null;
 
