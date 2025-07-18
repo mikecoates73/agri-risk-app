@@ -78,4 +78,40 @@ export interface SaveAnalysisResponse {
   error?: string;
 }
 
+export interface FAOSTATData {
+  id: number;
+  "Domain Code": string;
+  "Domain": string;
+  "Area Code (M49)": number;
+  "Area": string;
+  "Element Code": number;
+  "Element": string;
+  "Item Code (FAO)": number;
+  "Item": string;
+  "Year Code": number;
+  "Year": number;
+  "Unit": string;
+  "Value": number | null;
+  "Flag": string | null;
+  "Flag Description": string | null;
+  created_at?: string;
+}
+
+export interface ChartDataPoint {
+  year: number;
+  value: number;
+}
+
+export interface FAOSTATChartData {
+  area: string;
+  item: string;
+  unit: string;
+  data: ChartDataPoint[];
+}
+
+export interface FAOSTATFilterRequest {
+  area: string;
+  item: string;
+}
+
  

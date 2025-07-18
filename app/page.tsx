@@ -2,6 +2,7 @@ import AnalysisForm from './components/AnalysisForm';
 import ProtectedRoute from './components/ProtectedRoute';
 import Header from './components/Header';
 import UserHeader from './components/UserHeader';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -17,6 +18,8 @@ export default function Home() {
                 using AI-powered insights, weather data, and market statistics.
               </p>
             </div>
+
+
             
             <AnalysisForm />
           </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { AnalysisRequest, AnalysisResponse, WorldBankStats, WeatherData, TradingEconomicsStats, NASAImagery, FAOSTATItem } from '../../types';
 import AnalysisResult from './AnalysisResult';
+import FAOSTATChartCollapsible from './FAOSTATChartCollapsible';
 
 // UN-recognized countries list (alphabetically sorted)
 const COUNTRIES = [
@@ -389,6 +390,12 @@ export default function AnalysisForm() {
       </form>
 
       {result && <AnalysisResult result={result} country={formData.country} item={formData.item} />}
+      
+      <FAOSTATChartCollapsible 
+        country={formData.country} 
+        item={formData.item} 
+        isVisible={true} 
+      />
     </div>
   );
 } 
