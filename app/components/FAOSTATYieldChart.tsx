@@ -25,17 +25,17 @@ ChartJS.register(
   Legend
 );
 
-interface FAOSTATChartProps {
+interface FAOSTATYieldChartProps {
   data: FAOSTATChartData | null;
   loading: boolean;
   error: string | null;
 }
 
-export default function FAOSTATChart({ data, loading, error }: FAOSTATChartProps) {
+export default function FAOSTATYieldChart({ data, loading, error }: FAOSTATYieldChartProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg">
-        <div className="text-gray-500">Loading chart data...</div>
+        <div className="text-gray-500">Loading Yield data...</div>
       </div>
     );
   }
@@ -51,7 +51,7 @@ export default function FAOSTATChart({ data, loading, error }: FAOSTATChartProps
   if (!data || data.data.length === 0) {
     return (
       <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg">
-        <div className="text-gray-500">No data available for the selected filters</div>
+        <div className="text-gray-500">No Yield data available for the selected filters</div>
       </div>
     );
   }
@@ -60,14 +60,14 @@ export default function FAOSTATChart({ data, loading, error }: FAOSTATChartProps
     labels: data.data.map(point => point.year.toString()),
     datasets: [
       {
-        label: `${data.item} (${data.unit})`,
+        label: `Yield (${data.unit})`,
         data: data.data.map(point => point.value),
-        borderColor: 'rgb(59, 130, 246)',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderColor: 'rgb(245, 158, 11)', // Orange color for yield
+        backgroundColor: 'rgba(245, 158, 11, 0.1)',
         borderWidth: 2,
         fill: true,
         tension: 0.1,
-        pointBackgroundColor: 'rgb(59, 130, 246)',
+        pointBackgroundColor: 'rgb(245, 158, 11)',
         pointBorderColor: '#fff',
         pointBorderWidth: 2,
         pointRadius: 4,
@@ -85,7 +85,7 @@ export default function FAOSTATChart({ data, loading, error }: FAOSTATChartProps
       },
       title: {
         display: true,
-        text: `${data.item} - ${data.area}`,
+        text: `Yield - ${data.item} (${data.area})`,
         font: {
           size: 16,
           weight: 'bold' as const,

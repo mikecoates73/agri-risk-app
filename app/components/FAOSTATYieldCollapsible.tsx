@@ -1,16 +1,16 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import FAOSTATChart from './FAOSTATChart';
+import FAOSTATYieldChart from './FAOSTATYieldChart';
 import { FAOSTATChartData } from '@/types';
 
-interface FAOSTATChartCollapsibleProps {
+interface FAOSTATYieldCollapsibleProps {
   country: string;
   item: string;
   isVisible: boolean;
 }
 
-export default function FAOSTATChartCollapsible({ country, item, isVisible }: FAOSTATChartCollapsibleProps) {
+export default function FAOSTATYieldCollapsible({ country, item, isVisible }: FAOSTATYieldCollapsibleProps) {
   const [chartData, setChartData] = useState<FAOSTATChartData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +23,7 @@ export default function FAOSTATChartCollapsible({ country, item, isVisible }: FA
     setError(null);
 
     try {
-      const response = await fetch('/api/faostat-data', {
+      const response = await fetch('/api/faostat-yield', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,11 +36,11 @@ export default function FAOSTATChartCollapsible({ country, item, isVisible }: FA
       if (response.ok) {
         setChartData(data);
       } else {
-        setError(data.error || 'Failed to fetch chart data');
+        setError(data.error || 'Failed to fetch Yield data');
         setChartData(null);
       }
     } catch (error) {
-      console.error('Error fetching chart data:', error);
+      console.error('Error fetching Yield data:', error);
       setError('An unexpected error occurred');
       setChartData(null);
     } finally {
@@ -60,20 +60,11 @@ export default function FAOSTATChartCollapsible({ country, item, isVisible }: FA
     <div className="mt-6 bg-white rounded-lg shadow-md border border-gray-200">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+        className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-inset rounded-lg"
       >
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-            <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">FAOSTAT Historical Data</h3>
-            <p className="text-sm text-gray-600">
-              {country && item ? `${country} - ${item}` : 'Select country and item to view data'}
-            </p>
-          </div>
+        <div className="flex items-center">
+          <div className="w-3 h-3 bg-orange-500 rounded-full mr-3"></div>
+          <h3 className="text-lg font-semibold text-gray-900">Yield Data</h3>
         </div>
         <svg
           className={`w-5 h-5 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
@@ -89,27 +80,27 @@ export default function FAOSTATChartCollapsible({ country, item, isVisible }: FA
         <div className="px-6 pb-6">
           {!country || !item ? (
             <div className="text-center py-8 text-gray-500">
-              Please select both country and item to view FAOSTAT data
+              Please select both country and item to view Yield data
             </div>
           ) : (
             <>
-              <FAOSTATChart data={chartData} loading={loading} error={error} />
+              <FAOSTATYieldChart data={chartData} loading={loading} error={error} />
               
               {chartData && (
                 <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center p-3 bg-blue-50 rounded-lg">
+                  <div className="text-center p-3 bg-orange-50 rounded-lg">
                     <p className="text-sm text-gray-500">Data Points</p>
-                    <p className="text-xl font-bold text-blue-600">{chartData.data.length}</p>
+                    <p className="text-xl font-bold text-orange-600">{chartData.data.length}</p>
                   </div>
-                  <div className="text-center p-3 bg-blue-50 rounded-lg">
+                  <div className="text-center p-3 bg-orange-50 rounded-lg">
                     <p className="text-sm text-gray-500">Year Range</p>
-                    <p className="text-xl font-bold text-blue-600">
+                    <p className="text-xl font-bold text-orange-600">
                       {chartData.data[0]?.year} - {chartData.data[chartData.data.length - 1]?.year}
                     </p>
                   </div>
-                  <div className="text-center p-3 bg-blue-50 rounded-lg">
+                  <div className="text-center p-3 bg-orange-50 rounded-lg">
                     <p className="text-sm text-gray-500">Unit</p>
-                    <p className="text-xl font-bold text-blue-600">{chartData.unit}</p>
+                    <p className="text-xl font-bold text-orange-600">{chartData.unit}</p>
                   </div>
                 </div>
               )}

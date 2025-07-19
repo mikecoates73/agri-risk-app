@@ -1,4 +1,5 @@
 import AnalysisForm from './components/AnalysisForm';
+import DecisionFramework from './components/DecisionFramework';
 import ProtectedRoute from './components/ProtectedRoute';
 import Header from './components/Header';
 import UserHeader from './components/UserHeader';
@@ -18,7 +19,8 @@ export default function Home() {
               </p>
             </div>
 
-
+            {/* Decision Framework Component */}
+            <DecisionFramework />
             
             <AnalysisForm />
           </div>

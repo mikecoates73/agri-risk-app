@@ -4,7 +4,11 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { AnalysisRequest, AnalysisResponse, WorldBankStats, WeatherData, TradingEconomicsStats, NASAImagery, FAOSTATItem } from '../../types';
 import AnalysisResult from './AnalysisResult';
-import FAOSTATChartCollapsible from './FAOSTATChartCollapsible';
+
+import FAOSTATAreaHarvestedCollapsible from './FAOSTATAreaHarvestedCollapsible';
+import FAOSTATProductionValueCollapsible from './FAOSTATProductionValueCollapsible';
+import FAOSTATProductionCollapsible from './FAOSTATProductionCollapsible';
+import FAOSTATYieldCollapsible from './FAOSTATYieldCollapsible';
 
 // UN-recognized countries list (alphabetically sorted)
 const COUNTRIES = [
@@ -391,7 +395,25 @@ export default function AnalysisForm() {
 
       {result && <AnalysisResult result={result} country={formData.country} item={formData.item} />}
       
-      <FAOSTATChartCollapsible 
+      <FAOSTATAreaHarvestedCollapsible 
+        country={formData.country} 
+        item={formData.item} 
+        isVisible={true} 
+      />
+      
+      <FAOSTATProductionValueCollapsible 
+        country={formData.country} 
+        item={formData.item} 
+        isVisible={true} 
+      />
+      
+      <FAOSTATProductionCollapsible 
+        country={formData.country} 
+        item={formData.item} 
+        isVisible={true} 
+      />
+      
+      <FAOSTATYieldCollapsible 
         country={formData.country} 
         item={formData.item} 
         isVisible={true} 

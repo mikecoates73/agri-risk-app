@@ -24,11 +24,12 @@ export async function POST(request: NextRequest) {
       .select('"Area", "Item", "Year", "Value", "Unit"')
       .eq('"Area"', area)
       .eq('"Item"', item)
+      .eq('"Element"', 'Yield')
       .not('"Value"', 'is', null)
       .order('"Year"', { ascending: true });
 
     if (error) {
-      console.error('Error fetching FAOSTAT data:', error);
+      console.error('Error fetching FAOSTAT Yield data:', error);
       return NextResponse.json(
         { error: 'Failed to fetch data' },
         { status: 500 }
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     if (!data || data.length === 0) {
       return NextResponse.json(
-        { error: 'No data found for the selected area and item' },
+        { error: 'No Yield data found for the selected area and item' },
         { status: 404 }
       );
     }
